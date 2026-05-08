@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GrammarQuest v2 — English Mastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM — COSMIC SCHOLAR THEME
+═══════════════════════════════════════ */
+:root {
+  --bg:         #07090f;
+  --bg2:        #0c0f1a;
+  --glass:      rgba(255,255,255,0.044);
+  --glass2:     rgba(255,255,255,0.08);
+  --border:     rgba(255,255,255,0.08);
+  --border2:    rgba(255,255,255,0.18);
+
+  --c1: #6ee7f7;   /* cyan */
+  --c2: #a78bfa;   /* violet */
+  --c3: #f472b6;   /* pink */
+  --c4: #34d399;   /* emerald */
+  --c5: #fbbf24;   /* amber */
+  --c6: #f87171;   /* red */
+
+  --txt:  #eef2ff;
+  --txt2: rgba(238,242,255,.55);
+  --txt3: rgba(238,242,255,.28);
+
+  --ok-bg:  rgba(52,211,153,.11);
+  --ok-b:   #34d399;
+  --ng-bg:  rgba(248,113,113,.11);
+  --ng-b:   #f87171;
+
+  --r1: 10px; --r2: 18px; --r3: 26px; --r4: 40px;
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
+  --ease:   cubic-bezier(0.4,0,0.2,1);
+  --sh: 0 8px 40px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  min-height:100dvh;
+  overflow-x:hidden;
+}
+
+/* ── BACKGROUND ── */
+.bg-fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbDrift 15s ease-in-out infinite alternate;}
+.o1{width:700px;height:700px;background:var(--c2);opacity:.13;top:-250px;left:-200px;animation-delay:0s;}
+.o2{width:550px;height:550px;background:var(--c1);opacity:.11;top:25%;right:-180px;animation-delay:-5s;}
+.o3{width:450px;height:450px;background:var(--c3);opacity:.10;bottom:-100px;left:25%;animation-delay:-9s;}
+.o4{width:300px;height:300px;background:var(--c4);opacity:.08;top:55%;left:5%;animation-delay:-3s;}
+@keyframes orbDrift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(35px,25px) scale(1.08);}}
+
+.grain{position:fixed;inset:-200%;width:400%;height:400%;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.022;pointer-events:none;z-index:1;animation:gShift .5s steps(1) infinite;}
+@keyframes gShift{0%{transform:translate(0,0)}25%{transform:translate(-3%,-3%)}50%{transform:translate(3%,3%)}75%{transform:translate(-3%,3%)}100%{transform:translate(3%,-3%)}}
+
+/* ── LAYOUT ── */
+.app{position:relative;z-index:2;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:18px 16px 50px;}
+
+/* ── TOPBAR ── */
+.topbar{width:100%;max-width:800px;display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;animation:slideDown .6s var(--spring) both;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--c2),var(--c1));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;box-shadow:0 4px 18px rgba(167,139,250,.4);}
+.logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;background:linear-gradient(90deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo-ver{font-size:.65rem;font-weight:700;color:var(--c5);background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:4px;padding:2px 6px;margin-left:4px;letter-spacing:.5px;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.sound-btn{width:34px;height:34px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .2s;color:var(--txt2);}
+.sound-btn:hover{background:var(--glass2);color:var(--txt);}
+.wren-badge{font-size:.68rem;font-weight:700;color:var(--txt3);background:var(--glass);border:1px solid var(--border);border-radius:50px;padding:5px 12px;letter-spacing:.8px;text-transform:uppercase;}
+
+/* ── GLASS CARD ── */
+.card{width:100%;max-width:800px;background:var(--glass);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid var(--border);border-radius:var(--r3);box-shadow:var(--sh);padding:32px 28px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);}
+
+/* ── SCREENS ── */
+.screen{display:none;}.screen.active{display:block;}
+
+/* ══════════════════════════════
+   WELCOME SCREEN
+══════════════════════════════ */
+.welcome-wrap{text-align:center;padding:4px 0 20px;}
+.live-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(110,231,247,.08);border:1px solid rgba(110,231,247,.22);border-radius:50px;padding:5px 16px;font-size:.72rem;font-weight:700;color:var(--c1);letter-spacing:1px;text-transform:uppercase;margin-bottom:22px;animation:slideDown .5s var(--spring) .1s both;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--c1);animation:blink 1.8s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.hero-h{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.2rem);font-weight:800;line-height:1.07;letter-spacing:-1.5px;margin-bottom:14px;animation:slideUp .6s var(--spring) .15s both;}
+.hero-h .g{background:linear-gradient(120deg,var(--c1),var(--c2),var(--c3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-p{font-size:.95rem;color:var(--txt2);max-width:460px;margin:0 auto 28px;line-height:1.75;animation:slideUp .6s var(--spring) .25s both;}
+.hero-p em{color:var(--c2);font-style:normal;font-weight:600;}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;animation:slideUp .6s var(--spring) .35s both;}
+.st{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:var(--r2);padding:16px 10px;text-align:center;transition:all .3s;position:relative;overflow:hidden;cursor:default;}
+.st::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;border-radius:0 0 var(--r2) var(--r2);background:linear-gradient(90deg,var(--c2),var(--c1));transform:scaleX(0);transition:transform .3s var(--ease);}
+.st:hover{background:rgba(255,255,255,.065);border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
+.st:hover::after{transform:scaleX(1);}
+.st-ic{font-size:1.5rem;margin-bottom:6px;}
+.st-v{font-family:'Syne',sans-serif;font-size:1.55rem;font-weight:800;line-height:1;}
+.st-l{font-size:.68rem;color:var(--txt3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;}
+
+/* Name input */
+.name-row{display:flex;gap:10px;justify-content:center;margin-bottom:24px;animation:slideUp .6s var(--spring) .4s both;}
+.name-input{background:rgba(255,255,255,.06);border:1px solid var(--border2);border-radius:var(--r2);padding:12px 18px;color:var(--txt);font-family:'Plus Jakarta Sans',sans-serif;font-size:.92rem;font-weight:600;outline:none;width:220px;transition:all .25s;}
+.name-input::placeholder{color:var(--txt3);}
+.name-input:focus{border-color:var(--c2);background:rgba(167,139,250,.08);box-shadow:0 0 0 3px rgba(167,139,250,.15);}
+
+/* Start btn */
+.btn-start{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--c2),var(--c1));color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;border:none;border-radius:var(--r4);padding:15px 42px;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(167,139,250,.4);animation:slideUp .6s var(--spring) .45s both;letter-spacing:.3px;}
+.btn-start:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 48px rgba(167,139,250,.55);}
+.btn-start:active{transform:scale(.97);}
+.btn-start .arr{width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .25s;}
+.btn-start:hover .arr{transform:translateX(4px);}
+
+/* ══════════════════════════════
+   LEADERBOARD PREVIEW
+══════════════════════════════ */
+.lb-preview{margin-top:28px;animation:slideUp .6s var(--spring) .5s both;}
+.lb-preview h3{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r2);margin-bottom:7px;transition:all .2s;}
+.lb-row:hover{background:rgba(255,255,255,.055);}
+.lb-rank{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;width:24px;text-align:center;}
+.lb-rank.r1{color:var(--c5);}
+.lb-rank.r2{color:var(--txt2);}
+.lb-rank.r3{color:#cd7f32;}
+.lb-name{flex:1;font-size:.88rem;font-weight:600;color:var(--txt2);}
+.lb-score-chip{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;background:rgba(110,231,247,.08);border:1px solid rgba(110,231,247,.2);border-radius:50px;padding:3px 12px;color:var(--c1);}
+.lb-empty{font-size:.82rem;color:var(--txt3);text-align:center;padding:16px;font-style:italic;}
+
+/* ══════════════════════════════
+   QUIZ SCREEN
+══════════════════════════════ */
+.quiz-body{animation:fadeQ .3s var(--ease);}
+@keyframes fadeQ{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* Streak banner */
+.streak-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap;}
+.streak-chip{display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;padding:5px 14px;border-radius:50px;transition:all .3s;border:1px solid rgba(251,191,36,.0);}
+.streak-chip.active{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.3);color:var(--c5);animation:streakPop .4s var(--spring);}
+.streak-chip.inactive{background:rgba(255,255,255,.04);color:var(--txt3);}
+@keyframes streakPop{0%{transform:scale(.8)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.xp-chip{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--c4);background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:50px;padding:5px 13px;}
+
+/* Progress */
+.prog-row{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.prog-track{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:99px;overflow:visible;position:relative;}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--c2),var(--c1));transition:width .5s var(--ease);position:relative;}
+.prog-fill::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:10px;height:10px;border-radius:50%;background:var(--c1);box-shadow:0 0 8px var(--c1);}
+.prog-lbl{font-size:.72rem;font-weight:700;color:var(--txt3);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+/* Quiz header bar */
+.qhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap;}
+.qhdr-left{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:50px;padding:5px 12px;font-size:.75rem;font-weight:600;color:var(--txt2);}
+.chip.cat{border-color:rgba(167,139,250,.3);color:var(--c2);background:rgba(167,139,250,.07);}
+.qhdr-right{display:flex;align-items:center;gap:10px;}
+
+/* Score display */
+.score-disp{display:flex;align-items:center;gap:5px;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.22);border-radius:50px;padding:5px 13px;font-size:.8rem;font-weight:700;color:var(--c4);}
+.score-disp .sn{font-family:'Syne',sans-serif;font-size:.95rem;}
+
+/* Timer */
+.tmr-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.tmr-svg{transform:rotate(-90deg);}
+.tmr-track{fill:none;stroke:rgba(255,255,255,.07);stroke-width:3;}
+.tmr-fill{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .95s linear;}
+.tmr-num{position:absolute;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;color:var(--txt);}
+
+/* Power-ups */
+.powerups-row{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.pu-btn{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--r1);padding:8px 14px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;font-weight:700;color:var(--txt2);transition:all .22s;position:relative;overflow:hidden;}
+.pu-btn::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .2s;}
+.pu-btn:hover:not(:disabled){transform:translateY(-2px);border-color:var(--border2);}
+.pu-btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;}
+.pu-btn.pu-5050{border-color:rgba(251,191,36,.25);color:var(--c5);}
+.pu-btn.pu-5050:hover:not(:disabled){background:rgba(251,191,36,.1);}
+.pu-btn.pu-time{border-color:rgba(110,231,247,.25);color:var(--c1);}
+.pu-btn.pu-time:hover:not(:disabled){background:rgba(110,231,247,.1);}
+.pu-btn.pu-hint{border-color:rgba(52,211,153,.25);color:var(--c4);}
+.pu-btn.pu-hint:hover:not(:disabled){background:rgba(52,211,153,.1);}
+.pu-count{background:rgba(255,255,255,.12);border-radius:4px;padding:1px 6px;font-size:.68rem;font-weight:800;letter-spacing:.5px;}
+
+/* Question */
+.qno{font-size:.68rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;}
+.qtxt{font-family:'Syne',sans-serif;font-size:clamp(1rem,2.8vw,1.28rem);font-weight:700;color:var(--txt);line-height:1.5;margin-bottom:5px;}
+.qhi{font-size:.83rem;color:rgba(167,139,250,.7);font-weight:500;margin-bottom:22px;font-style:italic;}
+
+/* Options */
+.opts{display:flex;flex-direction:column;gap:9px;margin-bottom:22px;}
+.opt{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.033);border:1px solid var(--border);border-radius:var(--r2);padding:13px 16px;cursor:pointer;transition:background .18s,border-color .18s,transform .2s var(--spring);text-align:left;width:100%;position:relative;overflow:hidden;}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.068);border-color:rgba(255,255,255,.2);transform:translateX(4px);}
+.opt:disabled{cursor:not-allowed;}
+.opt.hidden-opt{opacity:.18;pointer-events:none;}
+.opt-lbl{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;background:rgba(255,255,255,.07);color:var(--txt2);flex-shrink:0;transition:all .22s;}
+.opt-txt{font-size:.9rem;font-weight:500;color:var(--txt2);line-height:1.42;flex:1;transition:color .18s;}
+.opt:hover:not(:disabled) .opt-txt{color:var(--txt);}
+.opt:hover:not(:disabled) .opt-lbl{background:rgba(167,139,250,.18);color:var(--c2);}
+
+/* Answer states */
+.opt.ok{background:var(--ok-bg)!important;border-color:var(--ok-b)!important;animation:okBounce .4s var(--spring);}
+.opt.ok .opt-lbl{background:var(--ok-b);color:#fff;box-shadow:0 0 14px rgba(52,211,153,.5);}
+.opt.ok .opt-txt{color:#a7f3d0;}
+.opt.ng{background:var(--ng-bg)!important;border-color:var(--ng-b)!important;animation:ngShake .4s ease;}
+.opt.ng .opt-lbl{background:var(--ng-b);color:#fff;}
+.opt.ng .opt-txt{color:#fca5a5;}
+@keyframes okBounce{0%{transform:scale(1)}40%{transform:scale(1.022) translateX(4px)}100%{transform:scale(1) translateX(4px)}}
+@keyframes ngShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px)}35%{transform:translateX(7px)}55%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* Hint box */
+.hint-box{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.22);border-radius:var(--r2);padding:13px 16px;margin-bottom:18px;display:none;animation:revDn .3s ease;}
+.hint-box.show{display:block;}
+.hint-hd{font-size:.7rem;font-weight:700;color:var(--c4);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.hint-txt{font-size:.85rem;color:rgba(238,242,255,.68);line-height:1.6;}
+
+/* Explanation */
+.exp-box{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.22);border-radius:var(--r2);padding:14px 16px;margin-bottom:20px;display:none;animation:revDn .3s ease;}
+.exp-box.show{display:block;}
+@keyframes revDn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.exp-hd{font-size:.7rem;font-weight:700;color:var(--c5);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.exp-txt{font-size:.86rem;color:rgba(238,242,255,.68);line-height:1.6;}
+
+/* Actions */
+.act-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:9px;align-items:center;}
+.abtn{display:flex;align-items:center;gap:7px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.85rem;border-radius:var(--r2);padding:11px 20px;cursor:pointer;transition:all .22s;border:1px solid var(--border);white-space:nowrap;}
+.abtn:active{transform:scale(.96);}
+.abtn.prev{background:rgba(255,255,255,.05);color:var(--txt2);}
+.abtn.prev:hover{background:rgba(255,255,255,.09);color:var(--txt);border-color:rgba(255,255,255,.2);}
+.abtn.skip{background:transparent;color:var(--txt3);justify-content:center;border-color:transparent;}
+.abtn.skip:hover{color:var(--txt2);}
+.abtn.nxt{background:linear-gradient(135deg,var(--c2),var(--c1));color:#fff;border-color:transparent;box-shadow:0 4px 18px rgba(167,139,250,.35);}
+.abtn.nxt:hover{box-shadow:0 8px 28px rgba(167,139,250,.5);transform:translateY(-1px);}
+.abtn.sub{background:linear-gradient(135deg,#f43f5e,var(--c5));color:#fff;border-color:transparent;box-shadow:0 4px 18px rgba(244,63,94,.3);}
+.abtn.sub:hover{box-shadow:0 8px 28px rgba(244,63,94,.45);transform:translateY(-1px);}
+
+/* ══════════════════════════════
+   RESULT SCREEN
+══════════════════════════════ */
+.res-top{text-align:center;padding:8px 0 24px;}
+.res-emoji-box{width:88px;height:88px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:3rem;margin:0 auto 14px;animation:bounceIn .6s var(--spring);box-shadow:0 0 40px rgba(167,139,250,.18);}
+.res-title{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.2rem);font-weight:800;letter-spacing:-1px;margin-bottom:6px;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:slideUp .5s var(--spring) .2s both;}
+.res-sub{font-size:.9rem;color:var(--txt2);animation:slideUp .5s var(--spring) .3s both;}
+
+/* XP earned popup */
+.xp-earned{display:inline-flex;align-items:center;gap:7px;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:50px;padding:6px 18px;font-family:'Syne',sans-serif;font-size:.88rem;font-weight:800;color:var(--c4);margin-top:10px;animation:xpPop .6s var(--spring) .5s both;opacity:0;}
+@keyframes xpPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+
+/* Score ring */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;margin:24px 0;animation:slideUp .5s var(--spring) .4s both;}
+.ring-svg{overflow:visible;}
+.ring-track{fill:none;stroke:rgba(255,255,255,.07);stroke-width:10;stroke-linecap:round;}
+.ring-fill{fill:none;stroke-width:10;stroke-linecap:round;stroke:url(#ringGrad);transition:stroke-dashoffset 1.3s cubic-bezier(.16,1,.3,1);}
+.ring-center{position:absolute;text-align:center;}
+.ring-big{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;color:var(--txt);line-height:1;display:block;}
+.ring-sm{font-size:.78rem;color:var(--txt3);font-weight:600;}
+.grade-pill{display:inline-flex;align-items:center;gap:8px;border-radius:50px;padding:7px 22px;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;margin-top:10px;letter-spacing:.3px;}
+.gA{background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.38);color:#34d399;}
+.gB{background:rgba(110,231,247,.12);border:1px solid rgba(110,231,247,.32);color:var(--c1);}
+.gC{background:rgba(251,191,36,.11);border:1px solid rgba(251,191,36,.3);color:var(--c5);}
+.gD{background:rgba(248,113,113,.11);border:1px solid rgba(248,113,113,.3);color:var(--c6);}
+
+/* Result stats */
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;animation:slideUp .5s var(--spring) .5s both;}
+.rst{background:rgba(255,255,255,.035);border:1px solid var(--border);border-radius:var(--r2);padding:16px 10px;text-align:center;position:relative;overflow:hidden;}
+.rst::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--r2) var(--r2) 0 0;}
+.rst.ok::before{background:var(--ok-b);}
+.rst.ng::before{background:var(--ng-b);}
+.rst.sk::before{background:var(--c5);}
+.rst-v{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:800;margin-bottom:3px;}
+.rst.ok .rst-v{color:#34d399;}.rst.ng .rst-v{color:#f87171;}.rst.sk .rst-v{color:var(--c5);}
+.rst-l{font-size:.68rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;}
+
+/* ── TOPIC ANALYTICS ── */
+.analytics-section{margin-bottom:24px;animation:slideUp .5s var(--spring) .6s both;}
+.analytics-section h3{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.topic-row{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+.topic-name{font-size:.8rem;font-weight:600;color:var(--txt2);width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topic-bar-track{flex:1;height:7px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;}
+.topic-bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.16,1,.3,1);}
+.topic-pct{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:800;width:38px;text-align:right;}
+
+/* ── LEADERBOARD ── */
+.lb-section{margin-bottom:24px;animation:slideUp .5s var(--spring) .7s both;}
+.lb-section h3{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.lb-entry{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--r2);border:1px solid var(--border);background:rgba(255,255,255,.03);margin-bottom:7px;transition:all .2s;}
+.lb-entry:hover{background:rgba(255,255,255,.055);}
+.lb-entry.is-new{border-color:rgba(110,231,247,.3);background:rgba(110,231,247,.06);animation:newEntry .5s var(--spring);}
+@keyframes newEntry{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.lb-rk{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;width:22px;text-align:center;}
+.lb-rk.rk1{color:var(--c5);}
+.lb-rk.rk2{color:rgba(200,200,220,.7);}
+.lb-rk.rk3{color:#cd7f32;}
+.lb-nm{flex:1;font-size:.87rem;font-weight:600;color:var(--txt2);}
+.lb-sc{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:800;background:rgba(110,231,247,.08);border:1px solid rgba(110,231,247,.18);border-radius:50px;padding:3px 11px;color:var(--c1);}
+.lb-gr{font-size:.72rem;padding:2px 8px;border-radius:4px;font-weight:700;margin-left:4px;}
+
+/* Result buttons */
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:slideUp .5s var(--spring) .75s both;}
+.btn-again{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--c2),var(--c1));color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;border:none;border-radius:var(--r4);padding:13px 32px;cursor:pointer;transition:all .22s;box-shadow:0 5px 24px rgba(167,139,250,.38);}
+.btn-again:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(167,139,250,.5);}
+.btn-rev{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;border:1px solid var(--border);border-radius:var(--r4);padding:13px 24px;cursor:pointer;transition:all .22s;}
+.btn-rev:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:var(--txt);}
+
+/* Review panel */
+.rev-panel{margin-top:24px;display:none;}
+.rev-panel.show{display:block;animation:revDn .35s ease;}
+.rev-panel h3{font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;}
+.rv{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r2);padding:13px 15px;margin-bottom:9px;border-left:3px solid var(--border);}
+.rv.ok{border-left-color:var(--ok-b);}
+.rv.ng{border-left-color:var(--ng-b);}
+.rv-q{font-size:.85rem;font-weight:600;color:var(--txt);margin-bottom:6px;line-height:1.4;}
+.rv-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.76rem;}
+.rv-u{color:var(--txt3);}
+.rv-u.oc{color:#34d399;font-weight:700;}
+.rv-u.nc{color:#f87171;font-weight:700;}
+.rv-c{color:#34d399;font-weight:700;}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(15,17,28,.95);border:1px solid var(--border2);border-radius:var(--r4);padding:10px 22px;font-size:.85rem;font-weight:600;color:var(--txt);z-index:999;transition:transform .35s var(--spring),opacity .35s;opacity:0;pointer-events:none;display:flex;align-items:center;gap:8px;backdrop-filter:blur(20px);box-shadow:0 8px 32px rgba(0,0,0,.5);}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* Combo flash */
+.combo-flash{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);pointer-events:none;z-index:100;font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;color:var(--c5);text-shadow:0 0 30px rgba(251,191,36,.8);opacity:0;transition:none;}
+.combo-flash.show{animation:comboAnim .7s var(--spring) forwards;}
+@keyframes comboAnim{0%{transform:translate(-50%,-50%) scale(0);opacity:1}50%{transform:translate(-50%,-55%) scale(1.2);opacity:1}100%{transform:translate(-50%,-65%) scale(0.8);opacity:0}}
+
+/* ── ANIMS ── */
+@keyframes slideDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounceIn{0%{opacity:0;transform:scale(.4)}60%{transform:scale(1.12)}80%{transform:scale(.96)}100%{opacity:1;transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .card{padding:22px 16px;border-radius:20px;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .act-row{grid-template-columns:auto 1fr auto auto;gap:7px;}
+  .abtn{padding:10px 14px;font-size:.8rem;}
+  .res-stats{gap:8px;}
+  .powerups-row{gap:6px;}
+  .pu-btn{padding:7px 10px;font-size:.73rem;}
+  .topic-name{width:100px;}
+}
+@media(max-width:380px){
+  .abtn.prev span{display:none;}
+  .abtn.skip{display:none;}
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:99px;}
+</style>
+</head>
+<body>
+
+<!-- SVG DEFS -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#6ee7f7"/>
+    </linearGradient>
+    <linearGradient id="timerUrgent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#6ee7f7"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- BG -->
+<div class="bg-fx" aria-hidden="true">
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="orb o3"></div><div class="orb o4"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- COMBO FLASH -->
+<div class="combo-flash" id="comboFlash">🔥</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<div class="app">
+  <!-- TOPBAR -->
+  <nav class="topbar">
+    <div class="logo">
+      <div class="logo-mark">📐</div>
+      <span class="logo-name">GrammarQuest</span>
+      <span class="logo-ver">v2</span>
+    </div>
+    <div class="topbar-right">
+      <button class="sound-btn" id="soundBtn" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+      <div class="wren-badge">Wren &amp; Martin</div>
+    </div>
+  </nav>
+
+  <!-- ══ WELCOME SCREEN ══ -->
+  <div class="card screen active" id="scWelcome">
+    <div class="welcome-wrap">
+      <div class="live-pill"><span class="live-dot"></span>Live · 500+ Questions</div>
+      <h1 class="hero-h">Master English<br><span class="g">Grammar Today</span></h1>
+      <p class="hero-p">Wren &amp; Martin based quiz with Power-Ups, Analytics &amp; Leaderboard.<br>
+        <em>अपनी अंग्रेजी व्याकरण जाँचें और आगे बढ़ें!</em></p>
+
+      <div class="stats-row">
+        <div class="st"><div class="st-ic">❓</div><div class="st-v">20</div><div class="st-l">Questions</div></div>
+        <div class="st"><div class="st-ic">⏱</div><div class="st-v">30s</div><div class="st-l">Per Q</div></div>
+        <div class="st"><div class="st-ic">⚡</div><div class="st-v">3</div><div class="st-l">Power-Ups</div></div>
+        <div class="st"><div class="st-ic">🏅</div><div class="st-v">40+</div><div class="st-l">Max XP</div></div>
+      </div>
+
+      <div class="name-row">
+        <input class="name-input" id="nameInput" type="text" placeholder="✏️ Your name..." maxlength="20" onkeydown="if(event.key==='Enter')startQuiz()">
+        <button class="btn-start" onclick="startQuiz()">
+          Begin Quiz <span class="arr">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Leaderboard preview on welcome -->
+    <div class="lb-preview">
+      <h3>🏆 Top Players</h3>
+      <div id="lbPreview"></div>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ SCREEN ══ -->
+  <div class="card screen" id="scQuiz">
+    <div id="quizBody" class="quiz-body">
+      <!-- Streak & XP -->
+      <div class="streak-bar">
+        <div class="streak-chip inactive" id="streakChip">🔥 Streak: <span id="streakNum">0</span></div>
+        <div class="xp-chip">⭐ XP: <span id="xpNum">0</span></div>
+      </div>
+
+      <!-- Progress -->
+      <div class="prog-row">
+        <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        <div class="prog-lbl" id="progLbl">1 / 20</div>
+      </div>
+
+      <!-- Header -->
+      <div class="qhdr">
+        <div class="qhdr-left">
+          <div class="chip" id="qChip">Q 1</div>
+          <div class="chip cat" id="catChip">Grammar</div>
+        </div>
+        <div class="qhdr-right">
+          <div class="score-disp">⭐ <span class="sn" id="liveScore">0</span><span style="color:var(--txt3);font-size:.72rem">/40</span></div>
+          <div class="tmr-wrap">
+            <svg class="tmr-svg" width="46" height="46" viewBox="0 0 46 46">
+              <circle class="tmr-track" cx="23" cy="23" r="19"/>
+              <circle class="tmr-fill" id="tmrArc" cx="23" cy="23" r="19" stroke-dasharray="119.38" stroke-dashoffset="0"/>
+            </svg>
+            <span class="tmr-num" id="tmrNum">30</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Power-ups -->
+      <div class="powerups-row">
+        <button class="pu-btn pu-5050" id="pu50" onclick="use5050()">
+          <span>✂️ 50/50</span><span class="pu-count" id="pu50c">×1</span>
+        </button>
+        <button class="pu-btn pu-time" id="puTime" onclick="useExtraTime()">
+          <span>⏳ +15s</span><span class="pu-count" id="puTimec">×1</span>
+        </button>
+        <button class="pu-btn pu-hint" id="puHint" onclick="useHint()">
+          <span>💡 Hint</span><span class="pu-count" id="puHintc">×1</span>
+        </button>
+      </div>
+
+      <!-- Hint box -->
+      <div class="hint-box" id="hintBox">
+        <div class="hint-hd">💡 Hint / संकेत</div>
+        <div class="hint-txt" id="hintTxt"></div>
+      </div>
+
+      <!-- Question -->
+      <div class="qno" id="qNo">QUESTION 1 OF 20</div>
+      <div class="qtxt" id="qTxt"></div>
+      <div class="qhi" id="qHi"></div>
+
+      <!-- Options -->
+      <div class="opts" id="optsGrid"></div>
+
+      <!-- Explanation -->
+      <div class="exp-box" id="expBox">
+        <div class="exp-hd">💡 Explanation / व्याख्या</div>
+        <div class="exp-txt" id="expTxt"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="act-row">
+        <button class="abtn prev" onclick="prevQ()">← <span>Prev</span></button>
+        <button class="abtn skip" onclick="skipQ()">Skip ⏭</button>
+        <button class="abtn nxt" id="btnNxt" onclick="nextQ()">Next →</button>
+        <button class="abtn sub" id="btnSub" onclick="submitQuiz()" style="display:none">Submit 🏁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT SCREEN ══ -->
+  <div class="card screen" id="scResult">
+    <div class="res-top">
+      <div class="res-emoji-box" id="resEmoji">🏆</div>
+      <h2 class="res-title" id="resTitle">Outstanding!</h2>
+      <p class="res-sub" id="resSub">You're a Grammar Champion!</p>
+      <div class="xp-earned" id="xpEarned">⭐ +0 XP Earned!</div>
+    </div>
+
+    <!-- Score ring -->
+    <div class="ring-wrap">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;">
+        <svg class="ring-svg" width="176" height="176" viewBox="0 0 176 176">
+          <circle class="ring-track" cx="88" cy="88" r="74" stroke-dasharray="464.96" stroke-dashoffset="0" transform="rotate(-210 88 88)"/>
+          <circle class="ring-fill" id="ringFill" cx="88" cy="88" r="74" stroke-dasharray="464.96" stroke-dashoffset="464.96" transform="rotate(-210 88 88)"/>
+        </svg>
+        <div class="ring-center" style="position:absolute;text-align:center;">
+          <span class="ring-big" id="resBig">0</span>
+          <span class="ring-sm" id="resDenom">/ 40</span>
+        </div>
+      </div>
+      <div class="grade-pill" id="gradePill">Grade A+</div>
+    </div>
+
+    <div class="res-stats">
+      <div class="rst ok"><div class="rst-v" id="rOk">0</div><div class="rst-l">✓ Correct</div></div>
+      <div class="rst ng"><div class="rst-v" id="rNg">0</div><div class="rst-l">✗ Wrong</div></div>
+      <div class="rst sk"><div class="rst-v" id="rSk">0</div><div class="rst-l">⏭ Skipped</div></div>
+    </div>
+
+    <!-- Topic analytics -->
+    <div class="analytics-section">
+      <h3>📊 Topic-wise Performance</h3>
+      <div id="topicAnalytics"></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="lb-section">
+      <h3>🏆 Leaderboard</h3>
+      <div id="lbResult"></div>
+    </div>
+
+    <div class="res-btns">
+      <button class="btn-again" onclick="startQuiz()">↺ Play Again</button>
+      <button class="btn-rev" onclick="toggleReview()" id="revBtn">📋 Review</button>
+    </div>
+    <div class="rev-panel" id="revPanel">
+      <h3>Answer Review</h3>
+      <div id="revList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   SOUND ENGINE (Web Audio API — no files)
+═══════════════════════════════════════ */
+let audioCtx = null, soundOn = true;
+
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type, dur, vol=0.18, delay=0) {
+  if (!soundOn) return;
+  try {
+    const ctx = getAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    const t = ctx.currentTime + delay;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(vol, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.start(t); osc.stop(t + dur);
+  } catch(e){}
+}
+
+function sndCorrect() {
+  playTone(523, 'sine', 0.12, 0.2);
+  playTone(659, 'sine', 0.12, 0.2, 0.08);
+  playTone(784, 'sine', 0.18, 0.2, 0.16);
+}
+function sndWrong() {
+  playTone(220, 'sawtooth', 0.2, 0.12);
+  playTone(180, 'sawtooth', 0.25, 0.1, 0.1);
+}
+function sndStreak() {
+  [523,659,784,1047].forEach((f,i) => playTone(f,'sine',0.15,0.22,i*0.07));
+}
+function sndPowerup() {
+  playTone(880, 'sine', 0.08, 0.15);
+  playTone(1100,'sine', 0.1, 0.15, 0.09);
+}
+function sndClick() { playTone(440,'sine',0.06,0.07); }
+function sndStart() {
+  [262,330,392,523].forEach((f,i) => playTone(f,'sine',0.18,0.15,i*0.09));
+}
+function sndComplete() {
+  [523,659,784,1047,1319].forEach((f,i) => playTone(f,'triangle',0.22,0.2,i*0.1));
+}
+function sndTick() { playTone(880,'sine',0.04,0.06); }
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔊' : '🔇';
+  showToast(soundOn ? '🔊 Sound On' : '🔇 Sound Off');
+}
+
+/* ═══════════════════════════════════════
+   QUESTION BANK
+═══════════════════════════════════════ */
+const QB = [
+{q:"Which of the following is a noun?",hi:"निम्नलिखित में से कौन सा संज्ञा है?",o:["Run","Beautiful","Happiness","Quickly"],a:2,e:"'Happiness' is an abstract noun. संज्ञा वह शब्द है जो किसी व्यक्ति, स्थान, वस्तु या भाव का नाम बताता है।",h:"It names a feeling or state of mind.",c:"Parts of Speech"},
+{q:"Identify the verb in: 'She sings beautifully.'",hi:"क्रिया पहचानें।",o:["She","Sings","Beautifully","All"],a:1,e:"'Sings' is the verb — the action word.",h:"Look for the action or state word.",c:"Parts of Speech"},
+{q:"Which word is an adjective?",hi:"कौन सा शब्द विशेषण है?",o:["Dance","Clever","Softly","Into"],a:1,e:"'Clever' is an adjective that describes a noun.",h:"Adjectives describe qualities.",c:"Parts of Speech"},
+{q:"What part of speech is 'quickly'?",hi:"'quickly' कौन सा शब्दभेद है?",o:["Noun","Verb","Adjective","Adverb"],a:3,e:"'Quickly' is an adverb — it modifies a verb.",h:"It tells HOW something is done.",c:"Parts of Speech"},
+{q:"Which is a preposition?",hi:"कौन सा पूर्वसर्ग है?",o:["And","But","Under","Wow"],a:2,e:"'Under' is a preposition showing position.",h:"Prepositions show relationship between words.",c:"Parts of Speech"},
+{q:"Identify the pronoun: 'They are my friends.'",hi:"सर्वनाम पहचानें।",o:["Are","My","They","Friends"],a:2,e:"'They' is a third-person plural pronoun.",h:"It replaces a noun (group of people).",c:"Parts of Speech"},
+{q:"Which word is a conjunction?",hi:"कौन सा संयोजक है?",o:["Beautiful","Because","Slowly","The"],a:1,e:"'Because' is a subordinating conjunction.",h:"It joins two clauses showing reason.",c:"Parts of Speech"},
+{q:"What is the article in 'An apple a day'?",hi:"Articles पहचानें।",o:["Apple","Day","An","Both An and a"],a:3,e:"Both 'An' and 'a' are indefinite articles.",h:"Look for words that come before nouns.",c:"Parts of Speech"},
+{q:"'Ouch! That hurts.' — 'Ouch' is a(n):",hi:"'Ouch' कौन सा शब्दभेद है?",o:["Noun","Verb","Interjection","Adjective"],a:2,e:"'Ouch' is an interjection expressing sudden pain.",h:"It expresses a sudden emotion.",c:"Parts of Speech"},
+{q:"Which word is a proper noun?",hi:"कौन सा व्यक्तिवाचक संज्ञा है?",o:["City","River","Amazon","Country"],a:2,e:"'Amazon' is a proper noun (name of a specific river).",h:"Proper nouns are specific names, always capitalized.",c:"Parts of Speech"},
+{q:"Choose correct Simple Present: 'She ___ every morning.'",hi:"सही Simple Present चुनें।",o:["run","runs","ran","running"],a:1,e:"With third-person singular (she/he/it), add -s or -es to the verb.",h:"Third person singular takes -s/-es.",c:"Tenses"},
+{q:"Identify the tense: 'They have finished their homework.'",hi:"काल पहचानें।",o:["Simple Past","Present Perfect","Past Perfect","Simple Present"],a:1,e:"'Have finished' = Present Perfect tense.",h:"Have/Has + past participle = Present Perfect.",c:"Tenses"},
+{q:"'He was reading when I arrived.' — 'was reading' is:",hi:"'was reading' का काल।",o:["Past Perfect","Past Perfect Continuous","Past Continuous","Simple Past"],a:2,e:"'Was reading' = Past Continuous (was/were + V-ing).",h:"Was/Were + V-ing shows ongoing past action.",c:"Tenses"},
+{q:"Choose correct Future Simple: 'I ___ you tomorrow.'",hi:"सही Future Simple।",o:["see","saw","will see","am seeing"],a:2,e:"Simple Future = will + base verb.",h:"Will + base verb = Simple Future.",c:"Tenses"},
+{q:"'I ___ here since 2015.' Choose correct.",hi:"सही विकल्प।",o:["live","lived","have lived","am living"],a:2,e:"'Since' (point of time) → use Present Perfect.",h:"Since = from a point in the past up to now.",c:"Tenses"},
+{q:"'He had left before she arrived.' — 'had left' is:",hi:"'had left' कौन सा काल?",o:["Past Perfect","Past Continuous","Simple Past","Present Perfect"],a:0,e:"Past Perfect: action before another past action.",h:"Had + past participle: happened BEFORE another past event.",c:"Tenses"},
+{q:"'They ___ football when it started raining.'",hi:"सही रूप।",o:["play","played","were playing","have played"],a:2,e:"Past Continuous: ongoing action interrupted.",h:"An ongoing action that got interrupted.",c:"Tenses"},
+{q:"'By next year, they ___ this project.'",hi:"सही रूप।",o:["will finish","will have finished","finished","finish"],a:1,e:"Future Perfect = will have + past participle.",h:"Will have + past participle = completed future action.",c:"Tenses"},
+{q:"'___ umbrella was left behind.' Choose correct article.",hi:"सही article।",o:["A","An","The","No article"],a:1,e:"'An' before vowel sounds. 'Umbrella' = /ʌ/.",h:"'Umbrella' starts with a vowel sound.",c:"Articles"},
+{q:"'___ Himalayas are the highest mountains.'",hi:"सही article।",o:["A","An","The","No article"],a:2,e:"'The' used with mountain ranges.",h:"Use 'the' with geographical ranges and chains.",c:"Articles"},
+{q:"'She is ___ honest woman.'",hi:"सही article।",o:["a","an","the","no article"],a:1,e:"'An' before vowel sounds. 'Honest' — 'h' is silent.",h:"The word starts with a vowel SOUND.",c:"Articles"},
+{q:"'He wants to become ___ engineer.'",hi:"सही article।",o:["a","an","the","no article"],a:1,e:"'An' before vowel sounds — 'engineer' = /ɛ/.",h:"'Engineer' starts with vowel sound /ɛ/.",c:"Articles"},
+{q:"'She plays ___ piano.'",hi:"सही article।",o:["a","an","the","no article"],a:2,e:"'The' is used with musical instruments.",h:"Musical instruments always take 'the'.",c:"Articles"},
+{q:"'Man is ___ mortal.'",hi:"सही article।",o:["a","an","the","no article"],a:3,e:"No article with abstract general nouns.",h:"General universal truths need no article.",c:"Articles"},
+{q:"'Neither the boys nor the girl ___ present.'",hi:"सही रूप।",o:["are","were","is","have been"],a:2,e:"Verb agrees with nearer subject ('girl' = singular).",h:"Look at the subject closest to the verb.",c:"Agreement"},
+{q:"'Mathematics ___ my favourite subject.'",hi:"सही रूप।",o:["are","were","is","have"],a:2,e:"Subject names ending in -s take singular verb.",h:"Mathematics, Physics, News = singular.",c:"Agreement"},
+{q:"'A number of students ___ absent today.'",hi:"सही रूप।",o:["was","is","are","has"],a:2,e:"'A number of' takes plural verb.",h:"'A number of' = plural. 'The number of' = singular.",c:"Agreement"},
+{q:"'Each of the students ___ given a book.'",hi:"सही रूप।",o:["were","are","has been","have been"],a:2,e:"'Each' always takes singular verbs.",h:"Each, Every, Either, Neither = singular.",c:"Agreement"},
+{q:"'The committee ___ divided in its opinion.'",hi:"सही रूप।",o:["are","were","is","have"],a:2,e:"Collective nouns acting as one unit take singular verb.",h:"One group acting together = singular.",c:"Agreement"},
+{q:"'Bread and butter ___ his only food.'",hi:"सही रूप।",o:["are","were","is","have"],a:2,e:"'Bread and butter' as a concept = singular.",h:"Single concept joined by 'and' = singular.",c:"Agreement"},
+{q:"Change to passive: 'She writes a letter.'",hi:"Passive voice।",o:["A letter writes by her.","A letter is written by her.","A letter was written by her.","A letter has been written by her."],a:1,e:"Simple Present → Passive: is/am/are + past participle.",h:"Present tense passive uses 'is/am/are + V3'.",c:"Voice"},
+{q:"Change to passive: 'They were building a bridge.'",hi:"Passive voice।",o:["A bridge was being built by them.","A bridge is being built.","A bridge has been built.","A bridge had been built."],a:0,e:"Past Continuous → Passive: was/were + being + past participle.",h:"Past Continuous passive = was/were + being + V3.",c:"Voice"},
+{q:"'The cake has been eaten.' Change to active.",hi:"Active voice।",o:["Someone ate the cake.","Someone has eaten the cake.","Someone was eating the cake.","Someone eats the cake."],a:1,e:"Present Perfect Passive → Active: has/have + eaten.",h:"'Has been eaten' reverses to 'has eaten'.",c:"Voice"},
+{q:"'Open the door.' (imperative) — Passive:",hi:"Passive voice।",o:["The door was opened.","Let the door be opened.","The door is opened.","The door should open."],a:1,e:"Imperative → Passive: Let + object + be + V3.",h:"Commands in passive use 'Let + object + be'.",c:"Voice"},
+{q:"He said, 'I am happy.' — Indirect speech:",hi:"Indirect speech।",o:["He said that he was happy.","He said that I am happy.","He told that he was happy.","He said that he is happy."],a:0,e:"'Am' → 'was' (backshift). 'I' → 'he'.",h:"Backshift: present → past in indirect speech.",c:"Narration"},
+{q:"He said, 'I will go tomorrow.' — Indirect:",hi:"Indirect speech।",o:["He said that he would go the next day.","He said he will go tomorrow.","He said he would go tomorrow.","He told he would go the next day."],a:0,e:"'Will'→'would'; 'tomorrow'→'the next day'.",h:"Will→would, tomorrow→the next day.",c:"Narration"},
+{q:"'Is she coming?' he asked. — Indirect:",hi:"Indirect speech।",o:["He asked if she was coming.","He asked that she was coming.","He asked whether she is coming.","He asked was she coming."],a:0,e:"Yes/No questions: use 'if/whether' + statement order.",h:"Yes/No questions use 'if' or 'whether'.",c:"Narration"},
+{q:"'Please help me.' she said. — Indirect:",hi:"Indirect speech।",o:["She told to help her.","She requested him to help her.","She said to help her.","She told that please help her."],a:1,e:"Requests: 'requested/asked + object + to + infinitive'.",h:"'Please' commands become 'requested to'.",c:"Narration"},
+{q:"He said, 'I can swim.' — Indirect:",hi:"Indirect speech।",o:["He said he can swim.","He said he could swim.","He told he can swim.","He said he might swim."],a:1,e:"'Can' → 'could' in Indirect Speech.",h:"Can backshifts to could.",c:"Narration"},
+{q:"'You ___ respect your elders.' (obligation)",hi:"सही modal।",o:["can","may","must","might"],a:2,e:"'Must' expresses strong obligation.",h:"Strong obligation/necessity.",c:"Modals"},
+{q:"'___ I come in, sir?' (permission)",hi:"सही modal।",o:["Must","Should","May","Will"],a:2,e:"'May' for formal permission.",h:"Formal permission uses 'May'.",c:"Modals"},
+{q:"'She ___ speak five languages.' (ability)",hi:"सही modal।",o:["must","may","can","shall"],a:2,e:"'Can' expresses present ability.",h:"Ability in present tense.",c:"Modals"},
+{q:"'It ___ rain today.' (possibility)",hi:"सही modal।",o:["must","shall","might","will"],a:2,e:"'Might' expresses possibility.",h:"Less certain possibility.",c:"Modals"},
+{q:"'You ___ have told me earlier.' (regret)",hi:"सही modal।",o:["can","could","should","shall"],a:2,e:"'Should have' + past participle = regret.",h:"Past regret uses 'should have'.",c:"Modals"},
+{q:"'She ___ be sleeping now.' (deduction)",hi:"सही modal।",o:["can","must","should","would"],a:1,e:"'Must' for logical deduction/certainty.",h:"Strong logical deduction.",c:"Modals"},
+{q:"'___ you please help me?' (polite request)",hi:"सही modal।",o:["May","Must","Could","Should"],a:2,e:"'Could' for polite requests.",h:"Polite requests use 'could'.",c:"Modals"},
+{q:"'If it rains, I ___ stay home.' — Type 1",hi:"Type 1 Conditional।",o:["will","would","had","have"],a:0,e:"Type 1: If + Simple Present, will + base verb.",h:"Real/possible condition in future.",c:"Conditionals"},
+{q:"'If I were rich, I ___ travel the world.' — Type 2",hi:"Type 2 Conditional।",o:["will","would","had","should"],a:1,e:"Type 2: If + Past Simple, would + base verb.",h:"Unreal present situation.",c:"Conditionals"},
+{q:"'If she had studied, she ___ passed.' — Type 3",hi:"Type 3 Conditional।",o:["would have","will have","had","would"],a:0,e:"Type 3: If + Past Perfect, would have + V3.",h:"Unreal past — didn't happen.",c:"Conditionals"},
+{q:"'I wish I ___ a bird.'",hi:"सही रूप।",o:["am","was","were","be"],a:2,e:"After 'wish', use 'were' for all persons.",h:"Wish uses subjunctive 'were'.",c:"Conditionals"},
+{q:"'Unless you hurry, you ___ miss the bus.'",hi:"सही रूप।",o:["will","would","can","had"],a:0,e:"'Unless' = if not. Type 1 applies.",h:"Unless = if not.",c:"Conditionals"},
+{q:"'He has been working ___ morning.'",hi:"सही preposition।",o:["from","since","for","by"],a:1,e:"'Since' for a point of time.",h:"Point of time: morning, 2019, Monday.",c:"Prepositions"},
+{q:"'She has been working ___ two hours.'",hi:"सही preposition।",o:["since","for","from","at"],a:1,e:"'For' for a period of time.",h:"Period of time: hours, days, years.",c:"Prepositions"},
+{q:"'She is good ___ mathematics.'",hi:"सही preposition।",o:["in","at","on","for"],a:1,e:"'Good at' = fixed collocation.",h:"Fixed phrase: good AT something.",c:"Prepositions"},
+{q:"'He died ___ cancer.'",hi:"सही preposition।",o:["from","of","by","with"],a:1,e:"'Die of' for disease/illness.",h:"Disease/illness uses 'of'.",c:"Prepositions"},
+{q:"'The train arrived ___ time.'",hi:"सही preposition।",o:["at","in","on","by"],a:2,e:"'On time' = punctual.",h:"On time = exactly on schedule.",c:"Prepositions"},
+{q:"Find error: 'He is one of the best player in the team.'",hi:"गलती पहचानें।",o:["He is","one of the","best player","in the team"],a:2,e:"After 'one of the', plural noun: 'best players'.",h:"'One of the' is followed by plural noun.",c:"Error Detection"},
+{q:"Find error: 'He did not went to school yesterday.'",hi:"गलती पहचानें।",o:["He did not","went","to school","yesterday"],a:1,e:"After 'did not', use base form: 'go'.",h:"Did not + base form (not past tense).",c:"Error Detection"},
+{q:"Find error: 'I have received your letter yesterday.'",hi:"गलती पहचानें।",o:["I have received","your letter","yesterday","No error"],a:0,e:"'Yesterday' requires Simple Past.",h:"Definite past time words need Simple Past.",c:"Error Detection"},
+{q:"Find error: 'He is more taller than his brother.'",hi:"गलती पहचानें।",o:["He is","more taller","than his brother","No error"],a:1,e:"'More taller' is wrong — just 'taller'.",h:"Never use 'more' with -er comparatives.",c:"Error Detection"},
+{q:"Find error: 'The police has arrested the thief.'",hi:"गलती पहचानें।",o:["The police","has arrested","the thief","No error"],a:1,e:"'Police' is always plural: 'have arrested'.",h:"Police is always treated as plural.",c:"Error Detection"},
+{q:"Find error: 'Between you and I, this is wrong.'",hi:"गलती पहचानें।",o:["Between you","and I","this is wrong","No error"],a:1,e:"'Between' needs object pronoun: 'me'.",h:"After prepositions, use object pronouns.",c:"Error Detection"},
+{q:"Synonym of 'Benevolent':",hi:"'Benevolent' का पर्यायवाची।",o:["Cruel","Kind","Brave","Proud"],a:1,e:"'Benevolent' means kind and generous.",h:"Bene = good (Latin).",c:"Vocabulary"},
+{q:"Antonym of 'Abundant':",hi:"'Abundant' का विलोम।",o:["Plentiful","Scarce","Rich","Plenty"],a:1,e:"'Abundant' = plenty; antonym = 'Scarce'.",h:"Opposite of plenty.",c:"Vocabulary"},
+{q:"Synonym of 'Obstinate':",hi:"'Obstinate' का पर्यायवाची।",o:["Obedient","Stubborn","Humble","Gentle"],a:1,e:"'Obstinate' = stubbornly refusing to change.",h:"Won't change mind.",c:"Vocabulary"},
+{q:"Synonym of 'Candid':",hi:"'Candid' का पर्यायवाची।",o:["Dishonest","Frank","Secretive","Cunning"],a:1,e:"'Candid' = honest and direct.",h:"Honest and straightforward.",c:"Vocabulary"},
+{q:"Antonym of 'Diligent':",hi:"'Diligent' का विलोम।",o:["Hardworking","Careful","Lazy","Sincere"],a:2,e:"'Diligent' = hardworking; antonym = 'Lazy'.",h:"Opposite of hardworking.",c:"Vocabulary"},
+{q:"'Beat about the bush' means:",hi:"'Beat about the bush' का अर्थ।",o:["Hit bushes","Avoid the main topic","Work hard","Run fast"],a:1,e:"To avoid the main topic; to be indirect.",h:"Not getting to the point.",c:"Idioms"},
+{q:"'Bite the bullet' means:",hi:"'Bite the bullet' का अर्थ।",o:["Get injured","Endure pain bravely","Eat bullets","Shoot"],a:1,e:"To endure a painful situation bravely.",h:"Face something unpleasant with courage.",c:"Idioms"},
+{q:"'Once in a blue moon' means:",hi:"'Once in a blue moon' का अर्थ।",o:["Every month","Very rarely","Once a week","At night"],a:1,e:"Very rarely, not often.",h:"Almost never happens.",c:"Idioms"},
+{q:"'Spill the beans' means:",hi:"'Spill the beans' का अर्थ।",o:["Make a mess","Reveal a secret","Cook food","Drop something"],a:1,e:"To reveal a secret accidentally.",h:"Secret comes out unintentionally.",c:"Idioms"},
+{q:"'Cost an arm and a leg' means:",hi:"इसका अर्थ।",o:["Very cheap","Very expensive","Physical injury","Bargaining"],a:1,e:"To be very expensive.",h:"Extremely costly.",c:"Idioms"},
+{q:"A person who cannot be corrected:",hi:"जिसे सुधारा नहीं जा सकता।",o:["Stubborn","Incorrigible","Obstinate","Infallible"],a:1,e:"'Incorrigible' = cannot be corrected.",h:"In- = not, corrigible = correctable.",c:"One Word"},
+{q:"Fear of water:",hi:"पानी का डर।",o:["Claustrophobia","Hydrophobia","Acrophobia","Pyrophobia"],a:1,e:"'Hydrophobia' = extreme fear of water.",h:"Hydro = water (Greek).",c:"One Word"},
+{q:"One who is present everywhere:",hi:"सर्वत्र उपस्थित।",o:["Omnipotent","Omniscient","Omnipresent","Mortal"],a:2,e:"'Omnipresent' = present everywhere.",h:"Omni = all, present = there.",c:"One Word"},
+{q:"A handwriting that cannot be read:",hi:"अपठनीय लिखावट।",o:["Eligible","Illegible","Legible","Lucid"],a:1,e:"'Illegible' = not clear enough to be read.",h:"Il- = not, legible = readable.",c:"One Word"},
+{q:"'The pen is mightier than the sword.' is:",hi:"यह किसका उदाहरण?",o:["Simile","Metaphor","Personification","Hyperbole"],a:1,e:"Metaphor: pen/sword represent writing/war.",h:"Direct comparison without 'like' or 'as'.",c:"Figures of Speech"},
+{q:"'She is as brave as a lion.' is a:",hi:"यह किसका उदाहरण?",o:["Metaphor","Simile","Personification","Oxymoron"],a:1,e:"Simile uses 'as...as' or 'like' to compare.",h:"Uses 'as...as' for comparison.",c:"Figures of Speech"},
+{q:"'The wind whispered through the trees.' is:",hi:"यह किसका उदाहरण?",o:["Simile","Metaphor","Personification","Alliteration"],a:2,e:"'Wind whispered' = giving human quality to wind.",h:"Wind given a human action.",c:"Figures of Speech"},
+{q:"'I have told you a million times.' is:",hi:"यह किसका उदाहरण?",o:["Simile","Irony","Hyperbole","Metaphor"],a:2,e:"'A million times' is an exaggeration.",h:"Wild exaggeration for effect.",c:"Figures of Speech"},
+{q:"'Life is a journey.' is:",hi:"यह किसका उदाहरण?",o:["Simile","Personification","Metaphor","Oxymoron"],a:2,e:"Metaphor: directly compares without 'like/as'.",h:"No 'like' or 'as' — direct comparison.",c:"Figures of Speech"},
+{q:"What is the plural of 'Ox'?",hi:"'Ox' का बहुवचन।",o:["Oxes","Oxen","Ox","Oxies"],a:1,e:"Irregular plural: Ox → Oxen.",h:"Irregular — like child/children.",c:"Gender & Number"},
+{q:"What is the plural of 'Phenomenon'?",hi:"'Phenomenon' का बहुवचन।",o:["Phenomenons","Phenomenas","Phenomena","Phenomenon"],a:2,e:"Greek origin: Phenomenon → Phenomena.",h:"Greek words: -on → -a in plural.",c:"Gender & Number"},
+{q:"What is the feminine of 'Nephew'?",hi:"'Nephew' का स्त्रीलिंग।",o:["Niece","Daughter","Sister","Aunt"],a:0,e:"Nephew = male; Niece = female child of sibling.",h:"Male sibling's child ↔ female sibling's child.",c:"Gender & Number"},
+{q:"Plural of 'Thesis' is:",hi:"'Thesis' का बहुवचन।",o:["Theses","Thesis","Thesises","Thesii"],a:0,e:"Greek origin: Thesis → Theses.",h:"Greek: -is → -es (crisis/crises).",c:"Gender & Number"},
+{q:"'She is poor ___ honest.'",hi:"सही conjunction।",o:["and","but","so","because"],a:1,e:"'But' connects contrasting ideas.",h:"Contrast between two qualities.",c:"Conjunctions"},
+{q:"'He worked hard ___ he could pass.'",hi:"सही conjunction।",o:["so that","because","although","unless"],a:0,e:"'So that' shows purpose.",h:"Purpose/intention.",c:"Conjunctions"},
+{q:"'___ she was tired, she continued working.'",hi:"सही conjunction।",o:["Because","Although","So","Unless"],a:1,e:"'Although' introduces a contrast.",h:"Despite being tired.",c:"Conjunctions"},
+{q:"'___ you leave now, you will miss the show.'",hi:"सही conjunction।",o:["If","Unless","Although","When"],a:1,e:"'Unless' = if not.",h:"Unless = if + not.",c:"Conjunctions"},
+{q:"'There is ___ milk left.' (almost none)",hi:"सही quantifier।",o:["few","a few","little","a little"],a:2,e:"'Little' = very small amount. With uncountable nouns.",h:"Milk is uncountable; 'few' is for countable.",c:"Fill in the Blanks"},
+{q:"'There are ___ students.' (almost none)",hi:"सही quantifier।",o:["few","a few","little","a little"],a:0,e:"'Few' = almost none. With countable nouns.",h:"Students are countable.",c:"Fill in the Blanks"},
+{q:"'He is ___ than his sister.' (intelligent)",hi:"सही form।",o:["more intelligent","most intelligent","intelligenter","intelligence"],a:0,e:"For long adjectives, use 'more' for comparative.",h:"3+ syllable adjectives use 'more'.",c:"Fill in the Blanks"},
+{q:"Verb form of 'Beauty':",hi:"'Beauty' की क्रिया।",o:["Beautify","Beautiful","Beautifully","Beautician"],a:0,e:"Beauty → Beautify (add -ify).",h:"-ify suffix makes verbs.",c:"Word Forms"},
+{q:"Adverb form of 'Happy':",hi:"'Happy' का क्रियाविशेषण।",o:["Happiness","Happily","Happier","Unhappy"],a:1,e:"Happy → Happily (y→i + -ly).",h:"Adjective to adverb: add -ly.",c:"Word Forms"},
+{q:"Noun form of 'Decide':",hi:"'Decide' का संज्ञा रूप।",o:["Decisive","Decision","Decidedly","Deciding"],a:1,e:"Decide → Decision (-ion suffix).",h:"-ion suffix creates nouns from verbs.",c:"Word Forms"},
+{q:"'Their / There / They're coming tomorrow.'",hi:"सही शब्द।",o:["Their","There","They're","All work"],a:2,e:"'They're' = they are.",h:"They're = they + are (contraction).",c:"Confusables"},
+{q:"'___ (Its/It's) a beautiful day.'",hi:"सही शब्द।",o:["Its","It's","Both","Neither"],a:1,e:"'It's' = it is. 'Its' = possessive.",h:"Apostrophe = contraction here.",c:"Confusables"},
+{q:"'There were ___ (fewer/less) students today.'",hi:"सही शब्द।",o:["fewer","less","both","neither"],a:0,e:"'Fewer' for countable nouns.",h:"Can you count them? Use fewer.",c:"Confusables"},
+{q:"'She is a doctor, ___?'",hi:"सही tag question।",o:["is she?","isn't she?","wasn't she?","aren't she?"],a:1,e:"Positive statement → negative tag.",h:"Positive → negative tag.",c:"Tag Questions"},
+{q:"'They haven't finished yet, ___?'",hi:"सही tag question।",o:["haven't they?","have they?","didn't they?","don't they?"],a:1,e:"Negative → positive tag.",h:"Negative → positive tag.",c:"Tag Questions"},
+{q:"'Let's go for a walk, ___?'",hi:"सही tag question।",o:["will you?","shall we?","won't you?","do we?"],a:1,e:"'Let's' suggestions use 'shall we?'",h:"Let's always uses 'shall we?'",c:"Tag Questions"},
+{q:"Comparative of 'Good':",hi:"'Good' का comparative।",o:["Gooder","Better","More good","Best"],a:1,e:"Good → Better → Best (irregular).",h:"Completely irregular comparison.",c:"Degrees"},
+{q:"Superlative of 'Bad':",hi:"'Bad' का superlative।",o:["Baddest","More bad","Worst","Most bad"],a:2,e:"Bad → Worse → Worst (irregular).",h:"Completely irregular: bad-worse-worst.",c:"Degrees"},
+{q:"'He enjoys ___ football.'",hi:"सही रूप।",o:["to play","playing","play","played"],a:1,e:"'Enjoy' + gerund (V-ing).",h:"Enjoy always takes -ing form.",c:"Inf. & Gerunds"},
+{q:"'She decided ___ the job.'",hi:"सही रूप।",o:["accepting","accept","to accept","accepted"],a:2,e:"'Decide' + infinitive.",h:"Decide takes 'to + verb'.",c:"Inf. & Gerunds"},
+{q:"'Would you mind ___ the door?'",hi:"सही रूप।",o:["to close","close","closing","closed"],a:2,e:"'Mind' + gerund.",h:"Mind takes -ing form.",c:"Inf. & Gerunds"},
+{q:"'Despite' is followed by:",hi:"'Despite' के बाद।",o:["That + clause","A noun/gerund","A verb","An infinitive"],a:1,e:"'Despite' is a preposition: noun/gerund follows.",h:"Despite is NOT a conjunction — no clause.",c:"Advanced Grammar"},
+{q:"'Hardly had he arrived ___ it started raining.'",hi:"सही रूप।",o:["than","when","that","before"],a:1,e:"'Hardly...when' = as soon as.",h:"Hardly/Scarcely → 'when', No sooner → 'than'.",c:"Advanced Grammar"},
+{q:"'No sooner had she left ___ the phone rang.'",hi:"सही रूप।",o:["when","then","than","that"],a:2,e:"'No sooner...than' is the correct pair.",h:"No sooner is always followed by 'than'.",c:"Advanced Grammar"},
+{q:"Find correctly spelled word:",hi:"सही वर्तनी।",o:["Accomodate","Accommodate","Acommodate","Accommodete"],a:1,e:"Accommodate: two c's and two m's.",h:"Double c, double m.",c:"Spelling"},
+{q:"Find correctly spelled word:",hi:"सही वर्तनी।",o:["Recieve","Receive","Receieve","Receve"],a:1,e:"'Receive' — i before e except after c.",h:"After 'c', e comes before i.",c:"Spelling"},
+{q:"Find correctly spelled word:",hi:"सही वर्तनी।",o:["Neccessary","Necesary","Necessary","Neccesary"],a:2,e:"Necessary: one c, one s, -ary.",h:"One c, one s: neCeSsary.",c:"Spelling"},
+{q:"'Protagonist of a story' means:",hi:"Protagonist का अर्थ।",o:["The villain","The narrator","The main character","A minor character"],a:2,e:"Protagonist = the main character.",h:"Proto = first, main.",c:"Literary Terms"},
+{q:"A 'sonnet' is a poem with:",hi:"Sonnet में कितनी पंक्तियाँ?",o:["8 lines","12 lines","14 lines","16 lines"],a:2,e:"A sonnet has exactly 14 lines.",h:"14 lines, often in iambic pentameter.",c:"Literary Terms"},
+{q:"'Alliteration' is the repetition of:",hi:"Alliteration किसकी पुनरावृत्ति?",o:["Vowel sounds","Same consonant at word start","End sounds","Random sounds"],a:1,e:"Alliteration = consonant sounds at start of words.",h:"Peter Piper — P repeats.",c:"Literary Terms"},
+];
+
+/* ═══════════════════════════════════════
+   STATE & CONFIG
+═══════════════════════════════════════ */
+const QPC=20, TPQ=30, ARC=119.38;
+let Qs=[], idx=0, score=0, xp=0, streak=0, maxStreak=0;
+let tmrInt=null, tLeft=TPQ;
+let answered=[], userAns=[], correct=0, wrong=0, skipped=0;
+let pu50=1, puTime=1, puHint=1;
+let topicStats={};
+let playerName='Scholar';
+
+/* ═══════════════════════════════════════
+   LEADERBOARD (localStorage)
+═══════════════════════════════════════ */
+function getLB(){try{return JSON.parse(localStorage.getItem('gq_lb')||'[]');}catch{return[];}}
+function saveLB(name,sc,grade){
+  let lb=getLB();
+  lb.push({name,score:sc,grade,date:new Date().toLocaleDateString()});
+  lb.sort((a,b)=>b.score-a.score);
+  lb=lb.slice(0,10);
+  try{localStorage.setItem('gq_lb',JSON.stringify(lb));}catch{}
+  return lb;
+}
+function renderLB(containerId, highlightIdx=-1){
+  const lb=getLB(), el=document.getElementById(containerId);
+  if(!el) return;
+  if(!lb.length){el.innerHTML='<div class="lb-empty">No scores yet — be the first! 🚀</div>';return;}
+  const medals=['🥇','🥈','🥉'];
+  el.innerHTML=lb.slice(0,5).map((e,i)=>`
+    <div class="lb-entry ${i===highlightIdx?'is-new':''}">
+      <span class="lb-rk rk${i+1}">${medals[i]||i+1}</span>
+      <span class="lb-nm">${e.name||'Anonymous'}</span>
+      <span class="lb-sc">${e.score} pts</span>
+      <span class="lb-gr ${gradeClass(e.grade)}">${e.grade||'—'}</span>
+    </div>`).join('');
+}
+function gradeClass(g){return g==='A+'||g==='A'?'gA':g==='B'?'gB':g==='C'?'gC':'gD';}
+
+/* ═══════════════════════════════════════
+   UTILS
+═══════════════════════════════════════ */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function showToast(msg,dur=2200){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+function showCombo(txt){
+  const c=document.getElementById('comboFlash');
+  c.textContent=txt; c.classList.remove('show');
+  void c.offsetWidth;
+  c.classList.add('show');
+}
+
+/* ═══════════════════════════════════════
+   QUIZ FLOW
+═══════════════════════════════════════ */
+function startQuiz(){
+  sndStart();
+  playerName = (document.getElementById('nameInput')?.value.trim())||'Scholar';
+  Qs=shuffle([...QB]).slice(0,QPC);
+  idx=0;score=0;xp=0;streak=0;maxStreak=0;
+  correct=0;wrong=0;skipped=0;
+  answered=new Array(QPC).fill(false);
+  userAns=new Array(QPC).fill(null);
+  pu50=1;puTime=1;puHint=1;
+  topicStats={};
+  showScreen('scQuiz');
+  loadQ();
+}
+
+function loadQ(){
+  clearInterval(tmrInt);
+  tLeft=TPQ;
+  const q=Qs[idx];
+
+  // Progress
+  document.getElementById('progFill').style.width=((idx+1)/QPC*100)+'%';
+  document.getElementById('progLbl').textContent=`${idx+1} / ${QPC}`;
+
+  // Header
+  document.getElementById('qChip').textContent=`Q ${idx+1}`;
+  document.getElementById('catChip').textContent=q.c;
+  document.getElementById('liveScore').textContent=score;
+  document.getElementById('xpNum').textContent=xp;
+
+  // Timer reset
+  setArc(TPQ,'url(#timerGrad)');
+  document.getElementById('tmrNum').textContent=TPQ;
+
+  // Streak
+  updateStreakUI();
+
+  // Question
+  document.getElementById('qNo').textContent=`QUESTION ${idx+1} OF ${QPC}`;
+  document.getElementById('qTxt').textContent=q.q;
+  document.getElementById('qHi').textContent=q.hi;
+
+  // Hide boxes
+  document.getElementById('expBox').classList.remove('show');
+  document.getElementById('hintBox').classList.remove('show');
+
+  // Buttons
+  document.getElementById('btnNxt').style.display=idx<QPC-1?'':'none';
+  document.getElementById('btnSub').style.display=idx===QPC-1?'':'none';
+
+  // Power-up states
+  document.getElementById('pu50').disabled=(pu50<=0||answered[idx]);
+  document.getElementById('puTime').disabled=(puTime<=0||answered[idx]);
+  document.getElementById('puHint').disabled=(puHint<=0||answered[idx]);
+  document.getElementById('pu50c').textContent=`×${pu50}`;
+  document.getElementById('puTimec').textContent=`×${puTime}`;
+  document.getElementById('puHintc').textContent=`×${puHint}`;
+
+  // Options
+  const grid=document.getElementById('optsGrid');
+  grid.innerHTML='';
+  const LBL=['A','B','C','D'];
+  q.o.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.dataset.idx=i;
+    btn.innerHTML=`<span class="opt-lbl">${LBL[i]}</span><span class="opt-txt">${opt}</span>`;
+    btn.onclick=()=>selectAns(i);
+    grid.appendChild(btn);
+  });
+
+  // Animate
+  const qb=document.getElementById('quizBody');
+  qb.style.animation='none'; qb.offsetHeight;
+  qb.style.animation='fadeQ .3s ease';
+
+  if(answered[idx]) restoreState();
+  else startTmr();
+}
+
+function setArc(t,stroke){
+  const arc=document.getElementById('tmrArc');
+  const off=ARC-(t/TPQ)*ARC;
+  arc.style.strokeDashoffset=off;
+  arc.style.stroke=stroke;
+}
+
+function startTmr(){
+  tmrInt=setInterval(()=>{
+    tLeft--;
+    document.getElementById('tmrNum').textContent=tLeft;
+    const col=tLeft<=8?'url(#timerUrgent)':'url(#timerGrad)';
+    setArc(tLeft,col);
+    if(tLeft===8) sndTick();
+    if(tLeft<=5&&tLeft>0) sndTick();
+    if(tLeft<=0){clearInterval(tmrInt);autoSkip();}
+  },1000);
+}
+
+function autoSkip(){
+  if(!answered[idx]){
+    answered[idx]=true;userAns[idx]=-1;skipped++;
+    streak=0;updateStreakUI();
+    revealCorrect();
+  }
+}
+
+function selectAns(i){
+  if(answered[idx]) return;
+  clearInterval(tmrInt);
+  answered[idx]=true;userAns[idx]=i;
+  const q=Qs[idx];
+  const btns=document.querySelectorAll('.opt');
+  btns.forEach(b=>b.disabled=true);
+
+  // Track topic
+  if(!topicStats[q.c]) topicStats[q.c]={c:0,t:0};
+  topicStats[q.c].t++;
+
+  if(i===q.a){
+    btns[i].classList.add('ok');
+    score+=2;xp+=10;correct++;
+    streak++;if(streak>maxStreak)maxStreak=streak;
+    topicStats[q.c].c++;
+    sndCorrect();
+    document.getElementById('liveScore').textContent=score;
+    document.getElementById('xpNum').textContent=xp;
+    updateStreakUI();
+    // Streak combos
+    if(streak===3){showCombo('🔥 3x Streak!');sndStreak();xp+=15;document.getElementById('xpNum').textContent=xp;}
+    if(streak===5){showCombo('⚡ 5x COMBO!');sndStreak();xp+=25;document.getElementById('xpNum').textContent=xp;}
+    if(streak===10){showCombo('🌟 UNSTOPPABLE!');sndStreak();xp+=50;document.getElementById('xpNum').textContent=xp;}
+  } else {
+    btns[i].classList.add('ng');
+    btns[q.a].classList.add('ok');
+    wrong++;streak=0;updateStreakUI();
+    sndWrong();
+  }
+  document.getElementById('expTxt').textContent=q.e;
+  document.getElementById('expBox').classList.add('show');
+  document.getElementById('pu50').disabled=true;
+  document.getElementById('puTime').disabled=true;
+  document.getElementById('puHint').disabled=true;
+}
+
+function revealCorrect(){
+  const q=Qs[idx];
+  if(!topicStats[q.c]) topicStats[q.c]={c:0,t:0};
+  topicStats[q.c].t++;
+  const btns=document.querySelectorAll('.opt');
+  btns.forEach(b=>b.disabled=true);
+  btns[q.a].classList.add('ok');
+  document.getElementById('expTxt').textContent=q.e;
+  document.getElementById('expBox').classList.add('show');
+  document.getElementById('pu50').disabled=true;
+  document.getElementById('puTime').disabled=true;
+  document.getElementById('puHint').disabled=true;
+}
+
+function restoreState(){
+  const q=Qs[idx];
+  const btns=document.querySelectorAll('.opt');
+  btns.forEach(b=>b.disabled=true);
+  const ua=userAns[idx];
+  if(ua===-1){btns[q.a].classList.add('ok');}
+  else{if(ua===q.a)btns[ua].classList.add('ok');else{btns[ua].classList.add('ng');btns[q.a].classList.add('ok');}}
+  document.getElementById('expTxt').textContent=q.e;
+  document.getElementById('expBox').classList.add('show');
+  document.getElementById('pu50').disabled=true;
+  document.getElementById('puTime').disabled=true;
+  document.getElementById('puHint').disabled=true;
+}
+
+function updateStreakUI(){
+  const chip=document.getElementById('streakChip');
+  document.getElementById('streakNum').textContent=streak;
+  if(streak>=3){chip.className='streak-chip active';}
+  else{chip.className='streak-chip inactive';}
+}
+
+function nextQ(){if(idx<QPC-1){clearInterval(tmrInt);idx++;loadQ();}}
+function prevQ(){if(idx>0){clearInterval(tmrInt);idx--;loadQ();}}
+function skipQ(){
+  const wasAnswered=answered[idx];
+  if(!wasAnswered){clearInterval(tmrInt);answered[idx]=true;userAns[idx]=-1;skipped++;streak=0;updateStreakUI();revealCorrect();}
+  if(idx<QPC-1) setTimeout(()=>{idx++;loadQ();},wasAnswered?0:700);
+}
+function submitQuiz(){
+  clearInterval(tmrInt);
+  if(!answered[idx]){answered[idx]=true;userAns[idx]=-1;skipped++;}
+  sndComplete();
+  showResults();
+}
+
+/* ═══════════════════════════════════════
+   POWER-UPS
+═══════════════════════════════════════ */
+function use5050(){
+  if(pu50<=0||answered[idx]) return;
+  sndPowerup();
+  pu50--;
+  document.getElementById('pu50c').textContent=`×${pu50}`;
+  document.getElementById('pu50').disabled=true;
+  const q=Qs[idx];
+  const btns=[...document.querySelectorAll('.opt')];
+  let wrong=btns.filter((_,i)=>i!==q.a);
+  shuffle(wrong);
+  wrong.slice(0,2).forEach(b=>{b.classList.add('hidden-opt');b.disabled=true;});
+  showToast('✂️ 50/50 used! Two wrong options removed.');
+}
+
+function useExtraTime(){
+  if(puTime<=0||answered[idx]) return;
+  sndPowerup();
+  puTime--;
+  document.getElementById('puTimec').textContent=`×${puTime}`;
+  document.getElementById('puTime').disabled=true;
+  tLeft=Math.min(tLeft+15, TPQ+15);
+  showToast('⏳ +15 seconds added!');
+}
+
+function useHint(){
+  if(puHint<=0||answered[idx]) return;
+  sndPowerup();
+  puHint--;
+  document.getElementById('puHintc').textContent=`×${puHint}`;
+  document.getElementById('puHint').disabled=true;
+  const q=Qs[idx];
+  document.getElementById('hintTxt').textContent=q.h;
+  document.getElementById('hintBox').classList.add('show');
+  showToast('💡 Hint revealed!');
+}
+
+/* ═══════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════ */
+function showResults(){
+  const max=QPC*2;
+  const pct=Math.round((score/max)*100);
+
+  document.getElementById('resBig').textContent=score;
+  document.getElementById('resDenom').textContent=`/ ${max}`;
+  document.getElementById('rOk').textContent=correct;
+  document.getElementById('rNg').textContent=wrong;
+  document.getElementById('rSk').textContent=skipped;
+  document.getElementById('xpEarned').textContent=`⭐ +${xp} XP Earned!`;
+
+  // Ring animation
+  setTimeout(()=>{
+    const fill=document.getElementById('ringFill');
+    const visArc=464.96*(300/360);
+    const used=visArc*(pct/100);
+    fill.style.transition='stroke-dashoffset 1.3s cubic-bezier(.16,1,.3,1)';
+    fill.style.strokeDashoffset=(464.96-used).toString();
+  },350);
+
+  let emoji,title,sub,grade,gCls;
+  if(pct>=90){emoji='🏆';title='Outstanding!';sub=`Grammar Champion! आप बेमिसाल हैं • ${pct}%`;grade='A+';gCls='gA';}
+  else if(pct>=75){emoji='🥇';title='Excellent!';sub=`बहुत अच्छा! Keep it up • ${pct}%`;grade='A';gCls='gA';}
+  else if(pct>=60){emoji='🥈';title='Good Job!';sub=`और अभ्यास करें • ${pct}%`;grade='B';gCls='gB';}
+  else if(pct>=40){emoji='📚';title='Keep Going!';sub=`More practice needed • ${pct}%`;grade='C';gCls='gC';}
+  else{emoji='💪';title='Try Again!';sub=`Practice makes perfect • ${pct}%`;grade='D';gCls='gD';}
+
+  document.getElementById('resEmoji').textContent=emoji;
+  document.getElementById('resTitle').textContent=title;
+  document.getElementById('resSub').textContent=sub;
+  const gp=document.getElementById('gradePill');
+  gp.textContent=`Grade ${grade} • 🔥 Best Streak: ${maxStreak}`;
+  gp.className=`grade-pill ${gCls}`;
+
+  // Topic analytics
+  buildAnalytics();
+
+  // Leaderboard
+  const lb=saveLB(playerName,score,grade);
+  const myIdx=lb.findIndex(e=>e.score===score&&e.name===playerName);
+  renderLB('lbResult', myIdx>=0&&myIdx<5?myIdx:-1);
+
+  // Review
+  buildReview();
+
+  showScreen('scResult');
+}
+
+function buildAnalytics(){
+  const el=document.getElementById('topicAnalytics');
+  const entries=Object.entries(topicStats).sort((a,b)=>b[1].t-a[1].t);
+  if(!entries.length){el.innerHTML='<div style="color:var(--txt3);font-size:.82rem;text-align:center;padding:12px;">No data yet.</div>';return;}
+  el.innerHTML=entries.map(([topic,{c,t}])=>{
+    const pct=Math.round((c/t)*100);
+    const col=pct>=75?'var(--c4)':pct>=50?'var(--c5)':'var(--c6)';
+    return `<div class="topic-row">
+      <div class="topic-name">${topic}</div>
+      <div class="topic-bar-track"><div class="topic-bar-fill" style="width:0%;background:${col}" data-w="${pct}%"></div></div>
+      <div class="topic-pct" style="color:${col}">${pct}%</div>
+    </div>`;
+  }).join('');
+  // Animate bars
+  setTimeout(()=>{
+    document.querySelectorAll('.topic-bar-fill').forEach(b=>{b.style.width=b.dataset.w;});
+  },400);
+}
+
+function buildReview(){
+  const el=document.getElementById('revList');
+  const LBL=['A','B','C','D'];
+  el.innerHTML=Qs.map((q,i)=>{
+    const ua=userAns[i];
+    const isOk=ua===q.a, isSk=ua===-1;
+    const uaHtml=isSk?`<span style="color:var(--c5)">⏭ Skipped</span>`
+      :`Your answer: <span class="${isOk?'oc':'nc'} rv-u">${LBL[ua]}) ${q.o[ua]}</span>`;
+    return `<div class="rv ${isOk?'ok':isSk?'':'ng'}">
+      <div class="rv-q">${i+1}. ${q.q}</div>
+      <div class="rv-meta">
+        <span class="rv-u">${uaHtml}</span>
+        <span class="rv-c">✓ ${LBL[q.a]}) ${q.o[q.a]}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleReview(){
+  const p=document.getElementById('revPanel');
+  const b=document.getElementById('revBtn');
+  p.classList.toggle('show');
+  b.textContent=p.classList.contains('show')?'✕ Close':'📋 Review';
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded',()=>{
+  renderLB('lbPreview');
+  document.getElementById('nameInput')?.focus();
+});
+</script>
+</body>
+</html>
